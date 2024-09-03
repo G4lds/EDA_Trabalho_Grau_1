@@ -208,9 +208,19 @@ class BinarySearchTree(BinarySearchTreeADT):
 
         return count_internal(self._root, True)
 
-
     def degree(self, key: object) -> int:
-        return 0 # temporario
+        def degree(current: Node, key: object) -> int:
+            if current is None:
+                return 0
+            elif key == current.key:
+                if current.left and current.right:
+                    return 2
+                elif current.left or current.right:
+                    return 1
+                return 0
+            return degree(current.next(key), key)
+
+        return degree(self._root, key)
 
     def height(self, key: object) -> int:
         return 0 # temporario
@@ -242,7 +252,7 @@ a.insert(6,1)
 
 
 print(a)
-print(a.count_internal())
+print(a.degree(6))
 
 print("\nTerminando testes")
 
