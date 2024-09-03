@@ -197,7 +197,17 @@ class BinarySearchTree(BinarySearchTreeADT):
     # IMPLEMENTACAO !!!
 
     def count_internal(self) -> int:
-        return 0 # temporario
+        def count_internal(current: Node, root: bool = False) -> int:
+            if current:
+                if current.left or current.right:
+                    if root:
+                        return count_internal(current.left) + count_internal(current.right)
+                    return 1 + count_internal(current.left) + count_internal(current.right)
+                return 0
+            return 0
+
+        return count_internal(self._root, True)
+
 
     def degree(self, key: object) -> int:
         return 0 # temporario
@@ -221,14 +231,18 @@ class BinarySearchTree(BinarySearchTreeADT):
 print("Iniciando testes\n")
 a = BinarySearchTree()
 
-a.insert(1,1)
+
 a.insert(3,1)
+a.insert(1,1)
+a.insert(5,1)
+a.insert(0,1)
 a.insert(2,1)
 a.insert(4,1)
-
+a.insert(6,1)
 
 
 print(a)
+print(a.count_internal())
 
 print("\nTerminando testes")
 
