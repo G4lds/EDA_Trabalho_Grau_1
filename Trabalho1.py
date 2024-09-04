@@ -45,6 +45,8 @@ class Node:
     def next(self, other_key: object): # -> Node:
         return self.left if other_key < self.key else self.right
 
+# Grupo 3
+
 class BinarySearchTree(BinarySearchTreeADT):
     def __init__(self) -> None:
         self._root: Node = None
@@ -239,7 +241,16 @@ class BinarySearchTree(BinarySearchTreeADT):
         return level(self._root, key)
 
     def ancestor(self, key: object) -> str:
-        return "0" # temporario
+        def ancestor(current: Node, key: object) -> str:
+            if current is None:
+                return "None"
+            elif key == current.key:
+                return str(current.key)
+            elif ancestor(current.next(key), key) == "None":
+                return "None"
+            return str(current.key) + " " + str(ancestor(current.next(key), key))
+
+        return ancestor(self._root, key)
 
     # IMPLEMENTACAO !!!
 
@@ -262,7 +273,7 @@ a.insert(6,1)
 
 
 print(a)
-print(a.degree(6))
+print(a.ancestor(7))
 
 print("\nTerminando testes")
 
