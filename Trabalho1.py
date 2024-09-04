@@ -225,7 +225,17 @@ class BinarySearchTree(BinarySearchTreeADT):
         return degree(self._root, key)
 
     def height(self, key: object) -> int:
-        return 0 # temporario
+            def height(node, key, depth):
+                if node is None:
+                    return -1
+                if node.key == key:
+                    return depth
+                elif key < node.key:
+                    return height(node.left, key, depth + 1)
+                else:
+                    return height(node.right, key, depth + 1)
+
+            return height(self._root, key, 0)
 
 
     def level(self, key: object) -> int:
