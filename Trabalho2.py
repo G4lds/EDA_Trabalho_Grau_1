@@ -42,7 +42,7 @@ class QuadTreeADT(ABC):
     @abstractmethod
     def is_empty(self) -> bool: ...
     @abstractmethod
-    def insert(self, x: float, y: float, value: object) -> None: ...
+    def insert(self, x: object, y: object, value: object) -> None: ...
     @abstractmethod
     def query_2D(self, rect: Interval2D) -> None: ...
     @abstractmethod
@@ -97,15 +97,31 @@ class QuadTree:
         query_2D(self._root, rect)
 
     def search(self, point: Point) -> object:
-        # for later development
-        pass
+        def search(current, point: Point) -> object:
+            if current is None:
+                return None
+            if current.x == point.x and current.y == point.y:
+                return current.value
+            if point.x < current.x and point.y >= current.y:
+                return search(current.NW, point)
+            elif point.x < current.x and point.y < current.y:
+                return search(current.SW, point)
+            elif point.x >= current.x and point.y >= current.y:
+                return search(current.NE, point)
+            else:
+                return search(current.SE, point)
+
+        return search(self._root, point)
 
     def all_points(self) -> List[Point]:
-        # for later development
-        return [Point(0,0)]
-
-a = QuadTree()
-
-a.insert(1,2,"aaaa")
-
-print(a._root)
+        points = []
+        def coleta_pontos(current) -> None:
+            if current is None:
+                return None
+            points.append(Point(current.x, current.y))
+            coleta_pontos(current.NW)
+            coleta_pontos(current.SW)
+            coleta_pontos(current.NE)
+            coleta_pontos(current.SE)
+        coleta_pontos(self._root)
+        return points
