@@ -95,22 +95,53 @@ class WayTrie(TrieADT):
         keys_with_prefix(node, prefix, results)
         return results
 
-    def count_keys_with_prefix(self,prefix: str) -> int:
-        return 0
+    def count_keys_with_prefix(self, prefix: str) -> int:
+        def count_keys_with_prefix(current: Node, prefix: str, result: int = 0) -> int:
+            if current is None:
+                return 0
+
+            for i in range(WayTrie.R):
+                prefix += chr(i)
+                result += count_keys_with_prefix(current.next[i], prefix)
+                prefix = prefix[:-1]
+
+            if current.value is not None:
+                return 1 + result
+            return 0 + result
+
+
+        node: Node = self._search(self._root, prefix, 0)
+        return count_keys_with_prefix(node, prefix)
 
     def longest_key_of(self, query:str) -> str:
-        return "0"
+        def longest_key_of(current: Node, query: str, list: List[str] = []):
+            if current is None:
+                return query
+
+            for i in range(WayTrie.R):
+                query += chr(i)
+                list.append(count_keys_with_prefix(current.next[i], query))
+                query = query[:-1]
+            return
+
+
+        node: Node = self._search(self._root, query, 0)
+        #return longest_key_of(node, query)
+
+        return "nao"
 
     def keys_by_pattern(self, pattern: str)  -> List[str]:
         return ["0"]
 
 a = WayTrie()
-a.insert("a","aaaa1")
+a.insert("aa","aaaa1")
 a.insert("aaaaa","aaaa2")
+a.insert("aaaaaa","aaaa4")
+a.insert("aaaaaaa","aaaa3")
 
 
-print(a.search("aaaaa"))
+print(a.count_keys_with_prefix("a"))
 
 a.delete("aaaaa")
 
-print(a.search("aaaaa"))
+print(a.longest_key_of("a"))
